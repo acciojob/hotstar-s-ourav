@@ -25,9 +25,10 @@ public class SubscriptionService {
 
     public Integer buySubscription(SubscriptionEntryDto subscriptionEntryDto){
         //Save The subscription Object into the Db and return the total Amount that user has to pay
-        Subscription subscription= subscriptionRepository.findById(subscriptionEntryDto.getUserId()).get();
-        User user=userRepository.findById(subscription.getId()).get();
-
+        Optional <Subscription> optionalSubscription= subscriptionRepository.findById(subscriptionEntryDto.getUserId());
+        if(!optionalSubscription.isPresent())
+            return null;
+        Subscription subscription=optionalSubscription.get();
         SubscriptionType subscriptionType=subscription.getSubscriptionType();
         int screens=subscription.getNoOfScreensSubscribed();
         int amt=0;
@@ -42,8 +43,6 @@ public class SubscriptionService {
         }
         subscription.setTotalAmountPaid(amt);
         subscriptionRepository.save(subscription);
-        user.setSubscription(subscription);
-        userRepository.save(user);
         return amt;
     }
 
@@ -90,10 +89,10 @@ public class SubscriptionService {
         //We need to find out total Revenue of hotstar : from all the subscriptions combined
         //Hint is to use findAll function from the SubscriptionDb
         if(subscriptionRepository.count()==0)
-            return null;
+            return 0;
         List<Subscription> subscriptionList= subscriptionRepository.findAll();
         if(subscriptionList.isEmpty())
-            return null;
+            return 0;
         int ans=0;
         for(Subscription s : subscriptionList){
             ans+= s.getTotalAmountPaid();
