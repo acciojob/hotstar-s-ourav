@@ -43,6 +43,11 @@ public class SubscriptionService {
         }
         subscription.setTotalAmountPaid(amt);
         subscriptionRepository.save(subscription);
+        if(subscription.getUser()!=null){
+            User user=subscription.getUser();
+            user.setSubscription(subscription);
+            userRepository.save(user);
+        }
         return amt;
     }
 
