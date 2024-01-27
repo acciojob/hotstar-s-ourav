@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SubscriptionService {
@@ -51,7 +52,12 @@ public class SubscriptionService {
         //If you are already at an ElITE subscription : then throw Exception ("Already the best Subscription")
         //In all other cases just try to upgrade the subscription and tell the difference of price that user has to pay
         //update the subscription in the repository
-        User user = userRepository.findById(userId).get();
+
+        Optional <User> optionalUser = userRepository.findById(userId);
+        if(!optionalUser.isPresent()){
+            return null;
+        }
+        User user=optionalUser.get();
         Subscription subscription=user.getSubscription();
         SubscriptionType subscriptionType=subscription.getSubscriptionType();
         int screens=subscription.getNoOfScreensSubscribed();

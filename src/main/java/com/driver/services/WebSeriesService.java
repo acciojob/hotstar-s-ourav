@@ -39,7 +39,7 @@ public class WebSeriesService {
         webSeries.setProductionHouse(productionHouse);
         webSeriesRepository.save(webSeries);
         productionHouseRepository.save(productionHouse);
-        return null;
+        return webSeries.getId();
     }
 
 }

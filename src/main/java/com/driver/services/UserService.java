@@ -40,6 +40,8 @@ public class UserService {
         //Hint: Take out all the Webseries from the WebRepository
         User user=userRepository.findById(userId).get();
         Subscription subscription=user.getSubscription();
+        if(subscription==null)
+            return 0;
         int ans=0;
         List<WebSeries> webSeriesList= webSeriesRepository.findAll();
         List<WebSeries> basic=new ArrayList<>();
@@ -48,23 +50,23 @@ public class UserService {
         for(WebSeries w:webSeriesList){
             if(w.getAgeLimit()>user.getAge())
                 continue;
-            if(w.getSubscriptionType().toString().equals("BASIC")){
+            if(w.getSubscriptionType()==(SubscriptionType.BASIC)){
                 basic.add(w);
             }
-            else if (w.getSubscriptionType().toString().equals("PRO")){
+        else if (w.getSubscriptionType()==(SubscriptionType.PRO)){
                 pro.add(w);
             }
-            else if(w.getSubscriptionType().toString().equals("ELITE")){
+            else if(w.getSubscriptionType()==(SubscriptionType.ELITE)){
                 elite.add(w);
             }
         }
-        if (user.getSubscription().toString().equals("BASIC")){
+        if (user.getSubscription().getSubscriptionType()==(SubscriptionType.BASIC)){
             ans= basic.size();;
         }
-        if (user.getSubscription().toString().equals("PRO")){
+        if (user.getSubscription().getSubscriptionType()==(SubscriptionType.PRO)){
             ans= basic.size()+ pro.size();
         }
-        if (user.getSubscription().toString().equals("ELITE")){
+        if (user.getSubscription().getSubscriptionType() == SubscriptionType.ELITE){
             ans= basic.size()+pro.size()+ elite.size();
         }
         return ans;
