@@ -92,6 +92,8 @@ public class SubscriptionService {
         if(subscriptionRepository.count()==0)
             return null;
         List<Subscription> subscriptionList= subscriptionRepository.findAll();
+        if(subscriptionList.isEmpty())
+            return null;
         int ans=0;
         for(Subscription s : subscriptionList){
             ans+= s.getTotalAmountPaid();
