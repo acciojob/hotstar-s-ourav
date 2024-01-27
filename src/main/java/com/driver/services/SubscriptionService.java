@@ -65,7 +65,10 @@ public class SubscriptionService {
 //            return null;
 //        }
         //User user=optionalUser.get();
-        Subscription subscription=user.getSubscription();
+        Optional <Subscription> optionalSubscription=subscriptionRepository.findById(userId);
+        if(!optionalSubscription.isPresent())
+            return 0;
+        Subscription subscription=optionalSubscription.get();
         SubscriptionType subscriptionType=subscription.getSubscriptionType();
         int screens=subscription.getNoOfScreensSubscribed();
 
