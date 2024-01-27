@@ -66,15 +66,15 @@ public class SubscriptionService {
         //In all other cases just try to upgrade the subscription and tell the difference of price that user has to pay
         //update the subscription in the repository
 
-//        Optional <User> optionalUser = userRepository.findById(userId);
-//        if(!optionalUser.isPresent()){
-//            return null;
-//        }
-        //User user=optionalUser.get();
-        Optional <Subscription> optionalSubscription=subscriptionRepository.findById(userId);
-        if(!optionalSubscription.isPresent())
+        Optional <User> optionalUser = userRepository.findById(userId);
+        if(!optionalUser.isPresent()){
+            return null;
+        }
+        User user=optionalUser.get();
+        Subscription subscription=user.getSubscription();
+        if(subscription==null)
             return 0;
-        Subscription subscription=optionalSubscription.get();
+
         SubscriptionType subscriptionType=subscription.getSubscriptionType();
         int screens=subscription.getNoOfScreensSubscribed();
 
@@ -85,16 +85,16 @@ public class SubscriptionService {
             subscription.setSubscriptionType(SubscriptionType.ELITE);
             subscription.setTotalAmountPaid(200+(100*screens));
             subscriptionRepository.save(subscription);
-//            user.setSubscription(subscription);
-//            userRepository.save(user);
+            user.setSubscription(subscription);
+            userRepository.save(user);
             return 200+(100*screens);
         }
         if(subscriptionType.toString().equals("BASIC")){
             subscription.setSubscriptionType(SubscriptionType.PRO);
             subscription.setTotalAmountPaid(300+(50*screens));
             subscriptionRepository.save(subscription);
-//            user.setSubscription(subscription);
-//            userRepository.save(user);
+            user.setSubscription(subscription);
+            userRepository.save(user);
             return 300+(50*screens);
         }
 
