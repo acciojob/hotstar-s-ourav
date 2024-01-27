@@ -30,8 +30,8 @@ public class UserService {
         if(user.getSubscription()!=null){
             user1.setSubscription(user.getSubscription());
         }
-        userRepository.save(user1);
-        return user1.getId();
+        User savedUser =userRepository.save(user1);
+        return savedUser.getId();//jkjkj
     }
 
     public Integer getAvailableCountOfWebSeriesViewable(Integer userId){
