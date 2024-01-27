@@ -43,14 +43,14 @@ public class SubscriptionService {
         }
         subscription.setTotalAmountPaid(amt);
         subscriptionRepository.save(subscription);
-        if(subscription.getUser()!=null){
-            User user=subscription.getUser();
-            user.setSubscription(subscription);
-            subscription.setUser(user);
-            subscriptionRepository.save(subscription);
-            userRepository.save(user);
-        }
-        else return null;
+//        if(subscription.getUser()!=null){
+//            User user=subscription.getUser();
+//            user.setSubscription(subscription);
+//            subscription.setUser(user);
+//            subscriptionRepository.save(subscription);
+//            userRepository.save(user);
+//        }
+
         return amt;
     }
 
@@ -60,11 +60,11 @@ public class SubscriptionService {
         //In all other cases just try to upgrade the subscription and tell the difference of price that user has to pay
         //update the subscription in the repository
 
-        Optional <User> optionalUser = userRepository.findById(userId);
-        if(!optionalUser.isPresent()){
-            return null;
-        }
-        User user=optionalUser.get();
+//        Optional <User> optionalUser = userRepository.findById(userId);
+//        if(!optionalUser.isPresent()){
+//            return null;
+//        }
+        //User user=optionalUser.get();
         Subscription subscription=user.getSubscription();
         SubscriptionType subscriptionType=subscription.getSubscriptionType();
         int screens=subscription.getNoOfScreensSubscribed();
@@ -76,16 +76,16 @@ public class SubscriptionService {
             subscription.setSubscriptionType(SubscriptionType.ELITE);
             subscription.setTotalAmountPaid(200+(100*screens));
             subscriptionRepository.save(subscription);
-            user.setSubscription(subscription);
-            userRepository.save(user);
+//            user.setSubscription(subscription);
+//            userRepository.save(user);
             return 200+(100*screens);
         }
         if(subscriptionType.toString().equals("BASIC")){
             subscription.setSubscriptionType(SubscriptionType.PRO);
             subscription.setTotalAmountPaid(300+(50*screens));
             subscriptionRepository.save(subscription);
-            user.setSubscription(subscription);
-            userRepository.save(user);
+//            user.setSubscription(subscription);
+//            userRepository.save(user);
             return 300+(50*screens);
         }
 
