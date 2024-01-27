@@ -25,10 +25,16 @@ public class SubscriptionService {
 
     public Integer buySubscription(SubscriptionEntryDto subscriptionEntryDto){
         //Save The subscription Object into the Db and return the total Amount that user has to pay
-        Optional <Subscription> optionalSubscription= subscriptionRepository.findById(subscriptionEntryDto.getUserId());
-        if(!optionalSubscription.isPresent())
+        Optional<User> optionalUser=userRepository.findById(subscriptionEntryDto.getUserId());
+        if(!optionalUser.isPresent())
             return null;
-        Subscription subscription=optionalSubscription.get();
+        User user=optionalUser.get();
+
+        Subscription subscription=new Subscription();
+        subscription.setSubscriptionType(subscriptionEntryDto.getSubscriptionType());
+        subscription.setNoOfScreensSubscribed(subscriptionEntryDto.getNoOfScreensRequired());
+        subscription.setUser(user);
+
         SubscriptionType subscriptionType=subscription.getSubscriptionType();
         int screens=subscription.getNoOfScreensSubscribed();
         int amt=0;
@@ -41,15 +47,15 @@ public class SubscriptionService {
         else if (subscriptionType.toString().equals("ELITE")){
                 amt=1000+ 350*screens;
         }
+
         subscription.setTotalAmountPaid(amt);
         subscriptionRepository.save(subscription);
-//        if(subscription.getUser()!=null){
-//            User user=subscription.getUser();
-//            user.setSubscription(subscription);
-//            subscription.setUser(user);
-//            subscriptionRepository.save(subscription);
-//            userRepository.save(user);
-//        }
+
+        if(subscription.getUser()!=null){
+            User user1=subscription.getUser();
+            user1.setSubscription(subscription);
+            userRepository.save(user1);
+        }
 
         return amt;
     }
